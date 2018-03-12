@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8">
+        <title> ShowDoc</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link href="../static/public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../static/public/css/showdoc.css" rel="stylesheet">
+        <script src="../static/public/js/lang.zh-cn.js?v=21"></script>
+        <link rel="stylesheet" href="../static/public/layer/skin/default/layer.css?v=3.0.11110" id="layuicss-skinlayercss">
+    </head>
+    <body>
+
+    <link rel="stylesheet" href="../static/public/css/login.css">
+    <style type="text/css">
+        .choose_type{
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        #choose_item{
+            width: 100%;
+        }
+    </style>
+    <div class="container">
+        <form class="form-signin" method="post" action="add">
+            <input type="hidden" id="item_id" name="item_id" value="">
+            <!-- <h3 class="form-signin-heading">新建项目</h3> -->
+            <div class="choose_type">
+                <label class="radio inline">
+                    <input type="radio" name="itemType" id="item_type1" value="1" checked="">
+                    常规项目
+                </label>
+                <label class="radio inline">
+                    <input type="radio" name="itemType" id="item_type2" value="2">
+                    单页项目
+                    &nbsp;
+                    <a href="https://www.showdoc.cc/page/65391" target="_blank">
+                        <i class="icon-question-sign"></i>
+                    </a>
+                </label>
+            </div>
+
+            <input type="text" class="input-block-level" id="itemName" name="itemName" placeholder="项目名" autocomplete="off" value="" required>
+            <input type="text" class="input-block-level" id="description" name="description" placeholder="项目描述" autocomplete="off" value="">
+            <input style="display:none">
+            <input style="display:none">
+            <input type="text" onfocus="this.type='password'" id="password" class="input-block-level" name="password" placeholder="访问密码（可选，私密项目请设置密码）" title="访问密码（可选，私密项目请设置密码）" autocomplete="off" value="" required>
+            <input type="hidden" name="status" value="1"/>
+            <div>
+                <select id="choose_item" name="copy_item_id" style="display: none;">
+
+                </select>
+            </div>
+            <br>
+            <button class="btn  btn-primary" type="submit">提交</button>
+            <a href="javascript:history.go(-1)" class="btn">返回</a>
+        </form>
+    </div>
+
+
+
+    <script src="../static/public/js/common/jquery.min.js"></script>
+    <script src="../static/public/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../static/public/js/common/showdoc.js?v=1.1"></script>
+    <script src="../static/public/layer/layer.js"></script>
+    <script src="../static/public/js/dialog.js"></script>
+    <div style="display:none">
+    </div>
+
+
+
+    <script type="text/javascript">
+        var password = $("#password").val();
+        if (password) {
+            $("#password").val('');
+            $("#password").attr('type','password');
+            $("#password").val(password);
+        };
+
+        $("#choose_item").hide();
+
+        //如果是编辑项目，则禁用复制项目功能
+        if ($("#item_id").val()) {
+            $("#show_copy").parent().hide();
+            $(".choose_type").html("");
+        };
+
+        $("#show_copy").change(function(){
+            if ($("#show_copy").is(':checked')) {
+                $("#choose_item").show();
+                $("#item_type1").attr("disabled","disabled");
+                $("#item_type2").attr("disabled","disabled");
+                $("#item_type1").removeAttr("checked");
+                $("#item_type2").removeAttr("checked");
+            }else{
+                $("#choose_item").hide();
+                $("#item_type1").removeAttr("disabled");
+                $("#item_type2").removeAttr("disabled");
+                $("#item_name").val("");
+                $("#item_description").val('');
+                $("#password").val('');
+            }
+            get_item_list();
+        });
+
+
+        function get_item_list(){
+            //获取已有项目列表
+            $.get(
+                "?s=/home/item/itemList",
+                {},
+                function(data){
+                    if (data.error_code === 0) {
+                        var json = data.data ;
+                        var html = '<option>请选择</option>';
+                        for (var i = 0; i < json.length; i++) {
+                            html += '<option value="'+json[i].item_id+'" item_description="'+json[i].item_description+'" password="'+json[i].password+'" >'+json[i].item_name+'</option>';
+                        };
+                        $("#choose_item").html(html);
+
+                    };
+                },
+                "json"
+            );
+        }
+
+
+        //当用户选择了某个复制项目，则填充信息
+        $("#choose_item").change(function(){
+            var a = $(this).find("option:selected");
+            var item_name = a.text();
+            var item_description = a.attr("item_description");
+            var password = a.attr("password");
+            $("#item_name").val(item_name+"--copy");
+            $("#item_description").val(item_description);
+            $("#password").val(password);
+
+        });
+    </script>
+    </body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>${(item.itemName)!}</title>
+        <link rel="shortcut icon" href="../static/public/logo/b_64.png" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link href="../static/public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../static/public/css/showdoc.css" rel="stylesheet">
+        <script src="../static/public/js/lang.zh-cn.js?v=21"></script>
+        <link rel="stylesheet" href="../static/public/layer/skin/default/layer.css?v=3.0.11110" id="layuicss-skinlayercss">
+    </head>
+    <body>
+        <link rel="stylesheet" type="text/css" href="../static/public/css/tab-tpl.css?v=1">
+        <style type="text/css">
+            .member-desc{
+                width: 300px;
+                margin: 0 auto;
+            }
+        </style>
+        <div class="tab-header"></div>
+        <div class="container tab-doc-container">
+            <div class="tab-doc-title-box">
+                <span class="dn"></span>
+                <h3>项目设置 &nbsp;&nbsp;<small><a href="show?itemId=${(item.itemId)!}">返回</a></small></h3>
+            </div>
+            <div class="tab-doc-body">
+                <div class="tab-doc-content">
+                    <ul class="nav nav-tabs" id="myTab">
+                        <li class="active"><a href="#base-info" data-toggle="tab">基础信息</a></li>
+                        <li><a href="#member" data-toggle="tab">成员管理</a></li>
+                        <li><a href="#doc" data-toggle="tab">文档管理</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="base-info">
+                            <form class="form-horizontal">
+                                <div class="control-group">
+                                    <label class="control-label" for="itemName">项目名:</label>
+                                    <div class="controls">
+                                        <input type="text" id="itemName" placeholder="" required>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="description">项目描述:</label>
+                                    <div class="controls">
+                                        <input type="text" id="description" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="password">访问密码:</label>
+                                    <div class="controls">
+                                        <input type="password" onfocus="this.type='password'" id="password" placeholder="(可选)私有项目请设置访问密码" required>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <button type="submit" id="item_save" class="btn">保存</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="tab-pane" id="member">
+                            <p><button id="add-member-btn" class="btn ">新增成员</button></p>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width:80px;">用户名</th>
+                                        <th style="width:80px;">添加时间</th>
+                                        <th style="width:80px;">权限</th>
+                                        <th style="width:80px;">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="member-list">
+                                    <tr>
+                                        <td>
+                                            <div class="type-parent">test</div>
+                                        </td>
+                                        <td>
+                                            <div class="type-parent">2018-03-09 08:34:18</div>
+                                        </td>
+                                        <td>
+                                            <div class="type-parent">编辑</div>
+                                        </td>
+                                        <td><a href="#" class="member-delete" data-id="1">删除</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="doc">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width:80px;">文档ID</th>
+                                        <th style="width:80px;">文档名称</th>
+                                        <th style="width:80px;">父级文档ID</th>
+                                        <th style="width:80px;">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="doc-list">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="itemId" value="${(item.itemId)!}">
+            <input type="hidden" id="itemType" value="${(item.itemType)!}">
+
+            <!-- 添加成员的弹窗 -->
+            <div id="member-modal" class="modal hide fade">
+                <!-- 编辑框 -->
+                <div class="">
+                    <div class="modal-header">
+                        <h4>新增成员</h4>
+                    </div>
+                    <div class="">
+                        <form class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label">用户名</label>
+                                <div class="controls">
+                                    <input type="text" name="username" id="username" placeholder="用户名" value="">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <label class="checkbox">
+                                        <input type="checkbox" id="member_group_id">只读(只能查看项目，不能修改/删除)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button type="submit" class="btn" id="member_save">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="member-desc">
+                            <p>权限说明：
+                                <br>默认成员可以新建/编辑项目页面，删除时将只能删除自己新建/编辑的页面。
+                                <br>勾选只读属性后，该成员对所有页面都只能查看，无法新增/编辑/删除
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn " data-dismiss="modal" aria-hidden="true">关闭</a>
+                </div>
+            </div>
+
+
+        </div>
+        <script src="../static/public/js/common/jquery.min.js"></script>
+        <script src="../static/public/bootstrap/js/bootstrap.min.js"></script>
+        <script src="../static/public/js/common/showdoc.js?v=1.1"></script>
+        <script src="../static/public/layer/layer.js"></script>
+        <script src="../static/public/js/dialog.js"></script>
+
+        <script src="../static/public/js/jquery.bootstrap-growl.min.js"></script>
+        <script src="../static/public/js/jquery.goup.min.js"></script>
+        <script src="../static/public/js/jquery.hotkeys.js"></script>
+        <script src="../static/public/jquery.zclip/jquery.zclip.js"></script>
+    </body>
+</html>
+<script>
+    $(function(){
+        $('a[data-toggle="tab"]').on('shown', function (e) {
+            //e.target // activated tab
+            //e.relatedTarget // previous tab
+            console.log($(e.target).attr("href"));
+        });
+
+        //展示第一个tab
+        $("#myTab a:first").tab("show");
+        var itemId = $("#itemId").val();
+        var itemType = $("#itemType").val();
+
+        //获取基础信息
+        get_base_info() ;
+        function get_base_info(){
+            $.get(
+                "detail",
+                {"itemId":itemId},
+                function(data){
+                    if (data.error_code === 0 ) {
+                        $("#itemName").val(data.item.itemName);
+                        $("#description").val(data.item.description);
+                        $("#password").val(data.item.password);
+                        $("#password").attr('type','password');
+                    }else{
+                        $.alert("错误");
+                    }
+                },
+                "json"
+            );
+        }
+
+        //保存项目基础信息
+        $("#item_save").click(function(){
+            var itemName = $("#itemName").val();
+            var description = $("#description").val();
+            var password = $("#password").val();
+            $.post(
+                "update",
+                {"itemId":itemId,"itemName":itemName,"description":description,"password":password,"itemType":itemType},
+                function(data){
+                    if (data.error_code === 0 ) {
+                        $.msg('保存成功',{"time":1000});
+                        get_base_info();
+                    }else{
+                        $.alert(data.error_message);
+                    }
+                },
+                "json"
+            );
+            return false;
+        });
+
+        //点击添加成员，弹出modal
+        $("#add-member-btn").click(function(){
+            $('#member-modal').modal({
+                "backdrop":'static'
+            });
+        });
+
+        //获取成员列表
+        get_member_list();
+        function get_member_list(){
+            $.get(
+                "memberList",
+                {"itemId":itemId},
+                function(data){
+                    $("#member-list").html('');
+                    if (data.status === 200 ) {
+                        var json = data.object ;
+                        if (json.length > 0 ) {
+                            for (var i = 0; i < json.length; i++) {
+                                var updateTime = new Date().format("yyyy-MM-dd hh:mm:ss");
+                                var html = '<tr>'
+                                    +'<td><div class="type-parent">'+json[i].userName+'</div></td>'
+                                    +'<td><div class="type-parent">'+updateTime+'</div></td>'
+                                    +'<td><div class="type-parent">编辑</div></td>'
+                                    +'<td><a href="#" class="member-delete" data-id="'+json[i].id+'">删除</a></td>'
+                                    +'</tr>';
+                                $("#member-list").append(html);
+                            };
+
+                        };
+                    } else {
+                        $.alert(data.message);
+                    }
+                },
+                "json"
+            );
+        }
+
+        get_doc_list();
+        function get_doc_list(){
+            $.get(
+                "docList",
+                {"itemId":itemId},
+                function(data){
+                    $("#doc-list").html('');
+                    if (data.status === 200 ) {
+                        var html = data.object.tableTrList;
+                        $("#doc-list").append(html + "");
+                    } else {
+                        $.alert(data.message);
+                    }
+                },
+                "json"
+            );
+        }
+
+        //添加成员
+        $("#member_save").click(function(){
+            var username = $("#username").val();
+            var member_group_id = $("#member_group_id").is(':checked') ? 0 : 1 ;
+            $.post(
+                "addMember",
+                {"itemId": itemId , "userName": username ,"id":member_group_id  },
+                function(data){
+                    if (data.status == 200) {
+                        $('#member-modal').modal('hide');
+                        $("#username").val('');
+                        $("#member_group_id").removeAttr("checked");
+                        $.msg('添加成功',{"time":1000});
+                        get_member_list();
+                    }else{
+                        $.alert(data.message);
+                    }
+                },
+                "json"
+            );
+            return false;
+        });
+
+        //删除成员
+        $("#member-list").on("click",'.member-delete',function(){
+            var id = $(this).data("id");
+            $.confirm("确定删除成员吗",{},function(){
+                $.post(
+                    "deleteMember",
+                    {"itemId": itemId , "id": id  },
+                    function(data){
+                        if (data.status === 200) {
+                            $.msg('删除成功',{"time":1000});
+                            get_member_list();
+
+                        }else{
+                            $.alert(data.message);
+                        }
+                    },
+                    "json"
+                );
+            });
+            return false;
+        });
+
+        //恢复菜单
+        $("#doc-list").on("click",'.doc-recover',function(){
+            var docId = $(this).data("id");
+            $.post(
+                "recoverDoc",
+                {"docId": docId, "itemId": itemId, "status": 1},
+                function(data){
+                    if (data.status == 200) {
+                        get_doc_list();
+                    } else {
+                        $.alert(data.message);
+                    }
+                },
+                "json"
+            );
+            return false;
+        });
+
+        //删除菜单
+        $("#doc-list").on("click",'.doc-remove',function(){
+            var docId = $(this).data("id");
+            $.confirm("确定删除文档吗",{},function(){
+                $.post(
+                    "removeDoc",
+                    {"docId": docId, "itemId": itemId, "status": 0},
+                    function(data){
+                        if (data.status == 200) {
+                            $.msg('删除成功',{"time":1000});
+                            get_doc_list();
+                        } else {
+                            $.alert(data.message);
+                        }
+                    },
+                    "json"
+                );
+            });
+            return true;
+        });
+
+    });
+
+    Date.prototype.format = function(fmt) {
+        var o = {
+            "M+" : this.getMonth()+1,                 //月份
+            "d+" : this.getDate(),                    //日
+            "h+" : this.getHours(),                   //小时
+            "m+" : this.getMinutes(),                 //分
+            "s+" : this.getSeconds(),                 //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S"  : this.getMilliseconds()             //毫秒
+        };
+        if(/(y+)/.test(fmt)) {
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        }
+        for(var k in o) {
+            if(new RegExp("("+ k +")").test(fmt)){
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            }
+        }
+        return fmt;
+    }
+</script>

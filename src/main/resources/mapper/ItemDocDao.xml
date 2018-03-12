@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.apidoc.mapper.ItemDocDao">
+
+    <resultMap id="recursionItemDocMenuMap" type="ItemDocMenu">
+        <id column="doc_id" property="docId"/>
+        <result column="status" property="status"/>
+        <result column="state" property="state"/>
+        <result column="doc_id" property="docId"/>
+        <collection property="children" ofType="ItemDocMenu" column="{state=state,id=doc_id}" select="findItemDocMenuByParentId"/>
+    </resultMap>
+
+    <select id="findAllRecursion" resultMap="recursionItemDocMenuMap">
+        SELECT
+            *,#{status} AS state
+        FROM ecsys_item_doc
+        WHERE parent_id ='' OR parent_id IS NULL
+        AND item_id = #{itemId}
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        ORDER BY `sort` ASC
+    </select>
+
+    <select id="findItemDocMenuByParentId" resultMap="recursionItemDocMenuMap">
+        SELECT
+            *,#{state} AS state
+        FROM ecsys_item_doc
+        WHERE parent_id = #{id}
+        <if test="state != null">
+            AND status = #{state}
+        </if>
+        ORDER BY `sort` ASC
+    </select>
+
+    <select id="findItemDocList" resultType="ItemDoc">
+        SELECT * FROM ecsys_item_doc a
+        <where>
+            <if test="docName != null and docName != ''">
+                AND a.doc_name LIKE  CONCAT('%', #{docName}, '%')
+            </if>
+            <if test="showContent != null and showContent != ''">
+                AND a.show_content LIKE  CONCAT('%', #{showContent}, '%')
+            </if>
+        </where>
+    </select>
+
+    <update id="updateDocStatus">
+        UPDATE ecsys_item_doc SET status = #{status}
+        WHERE doc_id = #{docId}
+    </update>
+
+    <update id="updateChildDocParentId">
+        UPDATE ecsys_item_doc SET parent_id = #{parentId}
+        WHERE parent_id = #{docId}
+    </update>
+
+    <update id="updateItemDoc">
+        UPDATE ecsys_item_doc SET doc_name = #{docName}, parent_id = #{parentId}, sort = #{sort}
+        WHERE doc_id = #{docId}
+    </update>
+
+</mapper>

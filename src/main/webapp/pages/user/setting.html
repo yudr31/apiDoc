@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title> ShowDoc</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link href="../static/public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../static/public/css/showdoc.css" rel="stylesheet">
+        <script src="../static/public/js/lang.zh-cn.js?v=21"></script>
+        <link rel="stylesheet" href="../static/public/layer/skin/default/layer.css?v=3.0.11110" id="layuicss-skinlayercss"/>
+    </head>
+    <body>
+        <link rel="stylesheet" href="../static/public/css/login.css">
+
+        <div class="container">
+
+            <form class="form-signin setting" method="post" action="setting">
+                <h3 class="form-signin-heading">修改个人信息</h3>
+                <input type="text" class="input-block-level" name="username" value="${(user.username)!}" <#if user.username != 'admin'> readonly="readonly" </#if> required>
+                <input type="password" class="input-block-level" name="password" placeholder="原密码" required>
+                <input type="password" class="input-block-level" name="new_password" placeholder="新密码" required>
+                <button class="btn  btn-primary" type="submit">提交</button>
+                <a href="javascript:history.go(-1)" class="btn">返回</a>
+            </form>
+
+        </div> <!-- /container -->
+
+
+
+        <script src="../static/public/js/common/jquery.min.js"></script>
+        <script src="../static/public/bootstrap/js/bootstrap.min.js"></script>
+        <script src="../static/public/js/common/showdoc.js?v=1.1"></script>
+        <script src="../static/public/layer/layer.js"></script>
+        <script src="../static/public/js/dialog.js"></script>
+        <div style="display:none">
+        </div>
+
+        <script src="../static/public/js/jquery.form.min.js"></script>
+        <script type="text/javascript">
+            $(function(){
+                //上传表单参数
+                var ajax_option = {
+                    dataType:"json",
+                    beforeSubmit:function(){
+
+                    },
+                    success:function(res){
+                        if (res.status === 200) {
+                            window.location.href = "../";
+                        } else {
+                            $.alert(res.message);
+                        }
+                    }
+                };
+
+                $('.setting').ajaxForm(ajax_option);
+            });
+        </script>
+
+    </body>
+</html>

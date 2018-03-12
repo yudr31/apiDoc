@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.apidoc.mapper.ItemDao">
+
+    <select id="findItemList" resultType="Item">
+        SELECT
+            a.doc_id AS "docId",a.doc_name AS "docName",
+            a.edit_content AS "editContent",a.href AS "href",
+            a.item_id AS "itemId",a.sort AS "sort",
+            b.doc_id AS "b-docId",b.doc_name AS "b-docName",
+            b.edit_content AS "parent.editContent",b.href AS "parent.href",
+            b.item_id AS "parent.itemId",b.sort AS "b-sort"
+        FROM ecsys_item_doc a
+        LEFT JOIN ecsys_item_doc b ON a.parent_id = b.doc_id
+        <where>
+            <if test="itemName != null and itemName != ''">
+                AND a.item_name LIKE  CONCAT('%', #{itemName}, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

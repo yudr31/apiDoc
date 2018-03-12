@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>${(item.itemName)!}</title>
+        <link rel="shortcut icon" href="../static/public/logo/b_64.png" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link href="../static/public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../static/public/css/showdoc.css" rel="stylesheet">
+        <link rel="stylesheet" href="../static/editor.md/css/editormd.css"/>
+        <script src="../static/public/js/lang.zh-cn.js?v=21"></script>
+        <link rel="stylesheet" href="../static/public/layer/skin/default/layer.css?v=3.0.11110" id="layuicss-skinlayercss">
+    </head>
+    <body>
+
+        <link href="../static/public/highlight/default.min.css" rel="stylesheet">
+        <link href="../static/public/lightbox/css/lightbox.css?v=1.1234567" rel="stylesheet">
+        <link rel="stylesheet" href="../static/public/css/item/show_single_page.css?v=2">
+
+        <div id="header">
+
+        </div>
+        <div class="container doc-container">
+            <div class="doc-title-box">
+                <span id="doc-title-span" class="dn"></span>
+                <h3 id="doc-title">cmsWeb</h3>
+                <ul class="tool-bar inline pull-right">
+                <#if user == "">
+                    <a class="btn btn-link" href="../user/login?refer_url=item/show?itemId=${(item.itemId)!}&docId=${(showDoc.docId)!}">登录/注册</a>
+                    <a class="btn btn-link" href="../">返回</a>
+                <#else>
+                    <li><a href="../user/logout" >退出</a></li>
+                    <#if isItemMember == true>
+                        <li><a href="edit?itemId=${(item.itemId)!}&docId=${(showDoc.docId)!}">编辑</a></li>
+                        <li>
+                            <div class="btn-group ">
+                                <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="#">
+                                    项目<span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="setting?itemId=${(item.itemId)!}">项目设置</a></li>
+                                    <li><a href="goBack">返回</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    <#else>
+                        <a href="../">返回</a>
+                    </#if>
+                </#if>
+                </ul>
+
+            </div>
+            <div id="doc-body" class="iframe_content">
+
+                <div id="page_md_content" class="markdown-body editormd-html-preview">
+                    ${(showDoc.showContent)!}
+                </div>
+
+            </div>
+
+        </div>
+        <div id="footer">
+        </div>
+
+        <script src="../static/public/js/common/jquery.min.js"></script>
+        <script src="../static/public/bootstrap/js/bootstrap.min.js"></script>
+        <script src="../static/public/js/common/showdoc.js?v=1.1"></script>
+        <script src="../static/public/layer/layer.js"></script>
+        <script src="../static/public/js/dialog.js"></script>
+        <div style="display:none">
+        </div>
+
+        <script src="../static/public/highlight/highlight.min.js"></script>
+        <script src="../static/public/editor.md/lib/marked.min.js"></script>
+        <script src="../static/public/editor.md/lib/prettify.min.js"></script>
+        <script src="../static/public/editor.md/lib/flowchart.min.js"></script>
+        <script src="../static/public/editor.md/lib/raphael.min.js"></script>
+        <script src="../static/public/editor.md/lib/underscore.min.js"></script>
+        <script src="../static/public/editor.md/lib/sequence-diagram.min.js"></script>
+        <script src="../static/public/editor.md/lib/jquery.flowchart.min.js"></script>
+        <script src="../static/public/editor.md/editormd.min.js"></script>
+        <script src="../static/public/js/jquery.goup.min.js"></script>
+        <script src="../static/public/lightbox/js/lightbox.js?a=abc"></script>
+        <script src="../static/public/jquery.zclip/jquery.zclip.js"></script>
+        <script src="../static/public/js/jquery.bootstrap-growl.min.js"></script>
+
+    </body>
+</html>

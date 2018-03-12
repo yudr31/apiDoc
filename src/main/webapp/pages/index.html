@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8">
+    <title>apiDoc</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="static/public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/public/css/showdoc.css" rel="stylesheet">
+    <script src="static/public/js/lang.zh-cn.js?v=212"></script>
+</head>
+<body>
+    <link rel="stylesheet" href="static/public/css/item/index.css?v=1.234" />
+    <div class="container-narrow">
+
+        <div class="masthead">
+            <div class="btn-group pull-right">
+            <#if user == "">
+                <a class="btn btn-link" href="user/login">登录/注册</a>
+            <#else>
+                <a class="btn btn-link" href="user/logout">退出登录</a>
+                <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="#">
+                    更多<span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <!-- dropdown menu links -->
+                    <li><a href="user/setting">个人设置</a></li>
+                </ul>
+            </#if>
+            </div>
+
+            </ul>
+            <h3 class="muted"><img src="static/public/logo/b_64.png" style="width:50px;height:50px;margin-bottom:15px;" alt="">apiDoc</h3>
+        </div>
+
+        <hr>
+
+        <div class="container-thumbnails">
+            <ul class="thumbnails" id="item-list">
+            <#list itemList as item>
+                <li class="span3 text-center">
+                    <a class="thumbnail item-thumbnail" href="item/show?itemId=${item.itemId!}" title="${item.description!}">
+                        <span class="item-setting" data-src="item/setting?itemId=${item.itemId!}" title="项目设置" style="display: none;">
+                            <i class="icon-wrench"></i>
+                        </span>
+                        <span class="item-top" data-action="top" data-item_id="1" title="置顶项目" style="display: none;">
+                            <i class="icon-arrow-up"></i>
+                        </span>
+                        <p class="my-item">${item.itemName!}</p>
+                    </a>
+                </li>
+            </#list>
+                <li class="span3 text-center">
+                    <a class="thumbnail " href="item/toAdd" title="添加一个新项目添加一个新项目">
+                        <p class="my-item ">新建项目&nbsp;<i class="icon-plus"></i></p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script src="static/public/js/common/jquery.min.js"></script>
+    <script src="static/public/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/public/js/common/showdoc.js?v=1.1"></script>
+    <script src="static/public/layer/layer.js"></script>
+    <script src="static/public/js/dialog.js"></script>
+</body>
+</html>
+<script src="static/public/js/item/index.js?v=12"></script>

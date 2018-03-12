@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8">
+        <title>${(item.itemName)!}</title>
+        <link rel="shortcut icon" href="../static/public/logo/b_64.png" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link href="../static/public/bootstrap/css/bootstrap.min.css?1.1d.1t" rel="stylesheet">
+        <link href="../static/public/css/showdoc.css" rel="stylesheet">
+        <link rel="stylesheet" href="../static/editor.md/css/editormd.css" />
+        <script src="../static/public/js/lang.zh-cn.js?v=21"></script>
+        <link rel="stylesheet" href="../static/public/layer/skin/default/layer.css?v=3.0.11110" id="layuicss-skinlayercss">
+    </head>
+    <body>
+
+        <link rel="stylesheet" href="../static/public/css/item/show.css?1.1d.1thdddefgh">
+
+        <div class="doc-head row">
+            <div class="left "><h4>${(item.itemName)!}</h4></div>
+            <div class="right">
+                <ul class="inline pull-right">
+
+                    <li>
+                        <div class="btn-group">
+                        <#if user == "">
+                            <a class="btn btn-link" href="../user/login?refer_url=item/show?itemId=${(item.itemId)!}&docId=${(showDoc.docId)!}">登录/注册</a>
+                            <a class="btn btn-link" href="../">返回</a>
+                        <#else>
+                            <a class="btn btn-link" href="../user/logout">退出</a>
+                            <#if isItemMember == true>
+                                <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="#">
+                                    项目<span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu left-dropdown-menu">
+                                    <li><a href="setting?itemId=${(item.itemId)!}">项目设置</a></li>
+                                    <li><a href="../">返回</a></li>
+                                </ul>
+                            <#else>
+                                <a href="../">返回</a>
+                            </#if>
+                        </#if>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="doc-body row">
+            <!-- 左侧栏菜单 -->
+            <div class="doc-left span3 bs-docs-sidebar pull-left">
+                <form class="form-search text-center" action="search" method="post">
+                    <div class="input-append search-input-append">
+                        <i class="icon-blank"></i>
+                        <input type="text" name="keyWord" class="search-query search-query-input" value="${keyWord!}">
+                        <input type="hidden" name="itemId" value="${(item.itemId)!}">
+                        <button type="submit" class="btn"><i class="icon-search"></i></button>
+                    </div>
+                </form>
+
+                <!-- 新建栏 -->
+                <div class="doc-left-newbar">
+                    <#if isItemMember == true>
+                    <div>
+                        <a title="新建页面" href="edit?itemId=${(item.itemId)!}" id="new-like"><i class="icon-plus"></i>&nbsp;</a>
+                        <a title="编辑目录" href="menu?itemId=${(item.itemId)!}&docId=${(showDoc.docId)!}" id="dir-like"><i class="icon-folder-open"></i></a>
+                    </div>
+                    </#if>
+                </div>
+
+                ${docMenu!}
+
+                <input type="hidden" id="itemId" value="${(item.itemId)!}">
+                <input type="hidden" id="docId" value="${(showDoc.docId)!}">
+
+            </div>
+            <div class="doc-right span12">
+                <!-- 编辑栏 -->
+                <div class="page-edit-link pull-right" style="display: block;">
+                    <ul class="inline">
+                    <#if user != "">
+                        <li><a class="btn btn-link" href="edit?itemId=${(item.itemId)!}&docId=${(showDoc.docId)!}" id="edit-link" title="编辑页面">编辑</a></li>
+                        <li>
+                            <div class="btn-group">
+                                <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="#">
+                                    更多<span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu left-dropdown-menu">
+                                    <!-- dropdown menu links -->
+                                    <li><a href="copy?itemId=${(item.itemId)!}&docId=${(showDoc.docId)!}" id="copy-link" title="复制该页面到新页面">复制</a></li>
+                                    <li><a href="#" data-page_id="0" class="show_page_info" title="详情">详情</a></li>
+                                    <li><a href="remove?itemId=${(item.itemId)!}&docId=${(showDoc.docId)!}" title="删除页面" onclick="return confirm('确认删除吗？');return false;" id="delete-link">删除</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </#if>
+                    </ul>
+                </div>
+                <!-- 页面内容 -->
+                <div class="iframe_content">
+                    <!-- 这里开始是内容 -->
+                    <div id="page_md_content" class="markdown-body editormd-html-preview">
+                        ${(showDoc.showContent)!}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../static/public/js/common/jquery.min.js"></script>
+        <script src="../static/public/bootstrap/js/bootstrap.min.js"></script>
+        <script src="../static/public/js/common/showdoc.js?v=1.1"></script>
+        <script src="../static/public/layer/layer.js"></script>
+        <script src="../static/public/js/dialog.js"></script>
+
+        <script src="../static/public/js/jquery.bootstrap-growl.min.js"></script>
+        <script src="../static/public/js/jquery.goup.min.js"></script>
+        <script src="../static/public/js/jquery.hotkeys.js"></script>
+        <script src="../static/public/jquery.zclip/jquery.zclip.js"></script>
+
+    </body>
+</html>
+<script>
+    //页面加载完就执行
+    $(function(){
+        $(".show_page_info").click(function(){
+            var docId =  $("#docId").val() ;
+            $.post(
+                "docDetail",
+                {"docId":docId},
+                function(data){
+                    var html = "<p>最后编辑时间："+data.addTime+"</p><p>编辑人："+data.userName+"</p>";
+                    $.alert(html);
+                },
+                "json"
+            );
+            return false;
+        });
+    });
+</script>
